@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Find Product</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    input, button { padding: 8px; margin: 5px 0; }
+    .error { color: red; }
+    .product-details { margin-top: 20px; border: 1px solid #ddd; padding: 15px; max-width: 400px; }
+  </style>
+</head>
+<body>
+
+  <h1>Product Lookup</h1>
+  <input type="number" id="productId" placeholder="Enter Product ID" min="1" />
+  <button onclick="getProduct()">Get Product</button>
+
+  <div id="output"></div>
+
+  <script>
+    async function getProduct() {
+      const output = document.getElementById('output');
+      output.innerHTML = '';
+      
+      const id = document.getElementById('productId').value.trim();
+      if (!id) {
+        output.innerHTML = '<p class="error">Please enter a Product ID.</p>';
+        return;
+      }
+      
+      try {
+        const res = await fetch(`/product/${id}`);
+        if (res.ok) {
+          const product = await res.json();
+          output.innerHTML = `
+            <div class="product-details">
+              <h2>${product.name}</h2>
+              <p><strong>Category:</strong> ${product.categoryEnum}</p>
+              <p><strong>Price:</strong> $${product.price}</p>
+              <p><strong>Status:</strong> ${product.productStatus}</p>
+              <p><strong>Quantity:</strong> ${product.quantity}</p>
+              <p><strong>Description:</strong> ${product.description || 'N/A'}</p>
+            </div>
+          `;
+        } else if (res.status === 404) {
+          output.innerHTML = `<p class="error">Product not found with ID ${id}.</p>`;
+        } else {
+          output.innerHTML = `<p class="error">Error: ${res.status} ${res.statusText}</p>`;
+        }
+      } catch (error) {
+        output.innerHTML = `<p class="error">Network or server error.</p>`;
+        console.error(error);
+      }
+    }
+  </script>
+
+</body>
+</html>

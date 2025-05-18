@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #e0f7fa;
+    }
+    h1 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+    /* Simple Rabbit Eating Carrot Animation */
+    .rabbit {
+      position: relative;
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      border: 2px solid #555;
+      border-radius: 50% 50% 40% 40%;
+      animation: munch 2s infinite;
+    }
+    .ear {
+      position: absolute;
+      top: -40px;
+      width: 30px;
+      height: 60px;
+      background: #fff;
+      border: 2px solid #555;
+      border-radius: 40% 40% 60% 60%;
+      animation: twitch 2s infinite;
+    }
+    .ear.left {
+      left: 10px;
+      transform-origin: bottom center;
+    }
+    .ear.right {
+      right: 10px;
+      transform-origin: bottom center;
+      animation-delay: 1s;
+    }
+    .eye {
+      position: absolute;
+      top: 35px;
+      width: 10px;
+      height: 10px;
+      background: #333;
+      border-radius: 50%;
+    }
+    .eye.left {
+      left: 25px;
+    }
+    .eye.right {
+      right: 25px;
+    }
+    .carrot {
+      position: absolute;
+      bottom: 30px;
+      right: -50px;
+      width: 40px;
+      height: 60px;
+      background: orange;
+      border-radius: 10px 10px 30px 30px;
+      animation: carrotBite 2s infinite;
+    }
+    .carrot::before {
+      content: "";
+      position: absolute;
+      top: -15px;
+      left: 5px;
+      width: 30px;
+      height: 15px;
+      background: #4caf50;
+      border-radius: 10px;
+    }
+
+    /* Animations */
+    @keyframes munch {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(10deg); }
+    }
+    @keyframes twitch {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(15deg); }
+    }
+    @keyframes carrotBite {
+      0%, 100% { right: -50px; }
+      50% { right: -40px; }
+    }
+    body {
+  font-family: Arial, sans-serif;
+  background: #e0f7fa;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* vertical centering */
+  align-items: center;      /* horizontal centering */
+  text-align: center;
+}
+  </style>
+</head>
+<body>
+
+  <div class="rabbit">
+    <div class="ear left"></div>
+    <div class="ear right"></div>
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+    <div class="carrot"></div>
+  </div>
+
+<style>
+    body {
+      background-color: #222;
+      color: #f39c12; /* bright orange */
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 5px #000;
+    }
+  </style>
+
+
+
+
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .cart-container {
+      max-width: 900px;
+      margin: auto;
+      padding: 30px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 50px;
+    }
+    .cart-item {
+      border-bottom: 1px solid #eee;
+      padding: 20px 0;
+    }
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    .cart-total {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: right;
+    }
+    .btn-clear {
+      background-color: #dc3545;
+      color: white;
+    }
+  </style>
+</head>
+Still Implementing :(
+<body>
+
+
+
+
+
+
+
+
+
+
+  
+  <div class="cart-container">
+  <h2>Your Shopping Cart</h2>
+  <div id="cartItems"></div>
+  <div class="cart-total mt-3">Total: ₹<span id="cartTotal">0</span></div>
+  <button class="btn btn-clear mt-3" onclick="clearCart()">Clear Cart</button>
+</div>
+
+<script>
+  function clearCart() {
+    window.location.href = "customer_dashboard.html";
+  }
+</script>
+
+
+
+ 
+</body>
+
+</html>

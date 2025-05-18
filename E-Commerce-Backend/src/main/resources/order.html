@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Management</title>
+</head>
+<body>
+  <h2>Place New Order</h2>
+  <form id="placeOrderForm">
+    <label>Session Token: <input type="text" id="placeToken" required /></label><br />
+    <label>Order Details (JSON):<br />
+      <textarea id="orderDetails" rows="5" cols="50" placeholder='{"productId":1,"quantity":2,...}'></textarea>
+    </label><br />
+    <button type="submit">Place Order</button>
+  </form>
+  <pre id="placeOrderResult"></pre>
+
+  <h2>Get All Orders</h2>
+  <button id="getAllOrdersBtn">Fetch Orders</button>
+  <pre id="allOrdersResult"></pre>
+
+  <h2>Cancel Order</h2>
+  <form id="cancelOrderForm">
+    <label>Session Token: <input type="text" id="cancelToken" required /></label><br />
+    <label>Order ID: <input type="number" id="cancelOrderId" required /></label><br />
+    <button type="submit">Cancel Order</button>
+  </form>
+  <pre id="cancelOrderResult"></pre>
+
+  <h2>Update Order</h2>
+  <form id="updateOrderForm">
+    <label>Session Token: <input type="text" id="updateToken" required /></label><br />
+    <label>Order ID: <input type="number" id="updateOrderId" required /></label><br />
+    <label>New Order Details (JSON):<br />
+      <textarea id="updateOrderDetails" rows="5" cols="50" placeholder='{"productId":1,"quantity":3,...}'></textarea>
+    </label><br />
+    <button type="submit">Update Order</button>
+  </form>
+  <pre id="updateOrderResult"></pre>
+
+  <h2>Get Orders by Date</h2>
+  <form id="getOrdersByDateForm">
+    <label>Date (dd-MM-yyyy): <input type="text" id="orderDate" placeholder="25-05-2025" required /></label><br />
+    <button type="submit">Fetch Orders</button>
+  </form>
+  <pre id="ordersByDateResult"></pre>
+
+<script>
+  const baseUrl = "http://localhost:8080";
+
+  // Place order
+  document.getElementById('placeOrderForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const token = document.getElementById('placeToken').value;
+    let orderData;
+    try {
+      orderData = JSON.parse(document.getElementById('orderDetails').value);
+    } catch {
+      alert('Invalid JSON in order details');
+      return;
+    }
+    const res = await fetch(`${baseUrl}/order/place`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        token
+      },
+      body: JSON.stringify(orderData)
+    });
+    const result = await res.json();
+    document.getElementById('placeOrderResult').textContent = JSON.stringify(result, null, 2);
+  };
+
+  // Get all orders
+  document.getElementById('getAllOrdersBtn').onclick = async () => {
+    const res = await fetch(`${baseUrl}/orders`);
+    const orders = await res.json();
+    document.getElementById('allOrdersResult').textContent = JSON.stringify(orders, null, 2);
+  };
+
+  // Cancel order
+  document.getElementById('cancelOrderForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const token = document.getElementById('cancelToken').value;
+    const orderId = document.getElementById('cancelOrderId').value;
+    const res = await fetch(`${baseUrl}/orders/${orderId}`, {
+      method: 'DELETE',
+      headers: { token }
+    });
+    const result = await res.json();
+    document.getElementById('cancelOrderResult').textContent = JSON.stringify(result, null, 2);
+  };
+
+  // Update order
+  document.getElementById('updateOrderForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const token = document.getElementById('updateToken').value;
+    const orderId = document.getElementById('updateOrderId').value;
+    let updateData;
+    try {
+      updateData = JSON.parse(document.getElementById('updateOrderDetails').value);
+    } catch {
+      alert('Invalid JSON in update details');
+      return;
+    }
+    const res = await fetch(`${baseUrl}/orders/${orderId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        token
+      },
+      body: JSON.stringify(updateData)
+    });
+    const result = await res.json();
+    document.getElementById('updateOrderResult').textContent = JSON.stringify(result, null, 2);
+  };
+
+  // Get orders by date
+  document.getElementById('getOrdersByDateForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const date = document.getElementById('orderDate').value;
+    const res = await fetch(`${baseUrl}/orders/by/date?date=${encodeURIComponent(date)}`);
+    const orders = await res.json();
+    document.getElementById('ordersByDateResult').textContent = JSON.stringify(orders, null, 2);
+  };
+</script>
+</body>
+</html>

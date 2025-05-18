@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Customer Dashboard</title>
+</head>
+<body>
+
+<h2>Get Current Customer Details</h2>
+<form id="getCustomerForm">
+  Session Token: <input type="text" id="customerToken" required />
+  <button type="submit">Get Details</button>
+</form>
+<pre id="customerDetails"></pre>
+
+<h2>Update Email or Mobile</h2>
+<form id="updateCredentialsForm">
+  Session Token: <input type="text" id="updateToken" required /><br />
+  New Email: <input type="email" id="newEmail" /><br />
+  New Mobile: <input type="text" id="newMobile" /><br />
+  <button type="submit">Update</button>
+</form>
+
+<h2>View My Orders</h2>
+<form id="viewOrdersForm">
+  Session Token: <input type="text" id="ordersToken" required />
+  <button type="submit">Get Orders</button>
+</form>
+<pre id="ordersList"></pre>
+
+<script>
+  const baseUrl = "http://localhost:8080";
+
+  // On page load, pre-fill token fields from localStorage if available
+  window.onload = () => {
+    const savedToken = localStorage.getItem('customerToken');
+    if (savedToken) {
+      document.getElementById('customerToken').value = savedToken;
+      document.getElementById('updateToken').value = savedToken;
+      document.getElementById('ordersToken').value = savedToken;
+    }
+  };
+
+  // Get current customer details
+  document.getElementById('getCustomerForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const token = document.getElementById('customerToken').value;
+    const res = await fetch(`${baseUrl}/customer/current`, {
+      headers: { token }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      document.getElementById('customerDetails').textContent = JSON.stringify(data, null, 2);
+      // Save token for reuse
+      localStorage.setItem('customerToken', token);
+    } else {
+      alert('Failed to fetch customer details: ' + res.status);
+    }
+  };
+
+  // Update email or mobile
+  document.getElementById('updateCredentialsForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const token = document.getElementById('updateToken').value;
+    const newEmail = document.getElementById('newEmail').value.trim();
+    const newMobile = document.getElementById('newMobile').value.trim();
+
+    if (!newEmail && !newMobile) {
+      alert('Please enter new email or mobile');
+      return;
+    }
+
+    const payload = {};
+    if (newEmail) payload.emailId = newEmail;
+    if (newMobile) payload.mobileNo = newMobile;
+
+    const res = await fetch(`${baseUrl}/customer/update/credentials`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        token
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      const updatedCustomer = await res.json();
+      alert('Updated successfully!');
+      document.getElementById('customerDetails').textContent = JSON.stringify(updatedCustomer, null, 2);
+      // Save token for reuse
+      localStorage.setItem('customerToken', token);
+    } else {
+      alert('Update failed: ' + res.status);
+    }
+  };
+
+  // View orders
+  document.getElementById('viewOrdersForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const token = document.getElementById('ordersToken').value;
+    const res = await fetch(`${baseUrl}/customer/orders`, {
+      headers: { token }
+    });
+
+    if (res.ok) {
+      const orders = await res.json();
+      document.getElementById('ordersList').textContent = JSON.stringify(orders, null, 2);
+      // Save token for reuse
+      localStorage.setItem('customerToken', token);
+    } else {
+      alert('Failed to fetch orders: ' + res.status);
+    }
+  };
+</script>
+
+</body>
+</html>

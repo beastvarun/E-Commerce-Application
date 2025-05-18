@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checking session</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #e0f7fa;
+    }
+    h1 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+    /* Simple Rabbit Eating Carrot Animation */
+    .rabbit {
+      position: relative;
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      border: 2px solid #555;
+      border-radius: 50% 50% 40% 40%;
+      animation: munch 2s infinite;
+    }
+    .ear {
+      position: absolute;
+      top: -40px;
+      width: 30px;
+      height: 60px;
+      background: #fff;
+      border: 2px solid #555;
+      border-radius: 40% 40% 60% 60%;
+      animation: twitch 2s infinite;
+    }
+    .ear.left {
+      left: 10px;
+      transform-origin: bottom center;
+    }
+    .ear.right {
+      right: 10px;
+      transform-origin: bottom center;
+      animation-delay: 1s;
+    }
+    .eye {
+      position: absolute;
+      top: 35px;
+      width: 10px;
+      height: 10px;
+      background: #333;
+      border-radius: 50%;
+    }
+    .eye.left {
+      left: 25px;
+    }
+    .eye.right {
+      right: 25px;
+    }
+    .carrot {
+      position: absolute;
+      bottom: 30px;
+      right: -50px;
+      width: 40px;
+      height: 60px;
+      background: orange;
+      border-radius: 10px 10px 30px 30px;
+      animation: carrotBite 2s infinite;
+    }
+    .carrot::before {
+      content: "";
+      position: absolute;
+      top: -15px;
+      left: 5px;
+      width: 30px;
+      height: 15px;
+      background: #4caf50;
+      border-radius: 10px;
+    }
+
+    /* Animations */
+    @keyframes munch {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(10deg); }
+    }
+    @keyframes twitch {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(15deg); }
+    }
+    @keyframes carrotBite {
+      0%, 100% { right: -50px; }
+      50% { right: -40px; }
+    }
+    body {
+  font-family: Arial, sans-serif;
+  background: #e0f7fa;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* vertical centering */
+  align-items: center;      /* horizontal centering */
+  text-align: center;
+}
+  </style>
+</head>
+<body>
+
+  <div class="rabbit">
+    <div class="ear left"></div>
+    <div class="ear right"></div>
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+    <div class="carrot"></div>
+  </div>
+
+<style>
+    body {
+      background-color: #222;
+      color: #f39c12; /* bright orange */
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 5px #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Checking session You will be redirected shortly...</h1>
+
+  
+
+  <script>
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 2500);
+  </script>
+
+
+
+
+
+
+
+
+
+</body>
+    
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Seller Management</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; }
+    input, button, select, textarea { padding: 6px; margin: 5px 0; width: 100%; max-width: 300px; }
+    .section { border: 1px solid #ccc; padding: 15px; margin-bottom: 25px; }
+    .output { background: #f9f9f9; padding: 10px; margin-top: 10px; white-space: pre-wrap; }
+    label { font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Seller Management</h1>
+
+  <!-- Add Seller -->
+  <div class="section">
+    <h2>Add New Seller</h2>
+    <label>Name</label>
+    <input type="text" id="addName" placeholder="Seller Name" />
+    <label>Mobile</label>
+    <input type="text" id="addMobile" placeholder="Mobile Number" />
+    <label>Email</label>
+    <input type="email" id="addEmail" placeholder="Email" />
+    <label>Address</label>
+    <textarea id="addAddress" placeholder="Address"></textarea>
+    <button onclick="addSeller()">Add Seller</button>
+    <div id="addResult" class="output"></div>
+  </div>
+
+  <!-- Get All Sellers -->
+  <div class="section">
+    <h2>Get All Sellers</h2>
+    <button onclick="getAllSellers()">Fetch Sellers</button>
+    <div id="allSellers" class="output"></div>
+  </div>
+
+  <!-- Get Seller By ID -->
+  <div class="section">
+    <h2>Get Seller By ID</h2>
+    <input type="number" id="sellerId" placeholder="Seller ID" />
+    <button onclick="getSellerById()">Get Seller</button>
+    <div id="sellerByIdResult" class="output"></div>
+  </div>
+
+  <!-- Delete Seller -->
+  <div class="section">
+    <h2>Delete Seller By ID</h2>
+    <input type="number" id="deleteSellerId" placeholder="Seller ID" />
+    <input type="text" id="tokenDelete" placeholder="Auth Token" />
+    <button onclick="deleteSellerById()">Delete Seller</button>
+    <div id="deleteResult" class="output"></div>
+  </div>
+
+  <script>
+    const baseUrl = ''; // Adjust base URL if backend is on a different path
+
+    async function addSeller() {
+      const name = document.getElementById('addName').value.trim();
+      const mobile = document.getElementById('addMobile').value.trim();
+      const email = document.getElementById('addEmail').value.trim();
+      const address = document.getElementById('addAddress').value.trim();
+      const output = document.getElementById('addResult');
+      output.textContent = '';
+
+      if (!name || !mobile) {
+        output.textContent = 'Name and Mobile are required.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${baseUrl}/addseller`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, mobile, email, address })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          output.textContent = 'Seller added successfully:\n' + JSON.stringify(data, null, 2);
+        } else {
+          const err = await res.text();
+          output.textContent = 'Error: ' + err;
+        }
+      } catch (e) {
+        output.textContent = 'Network error or server not reachable.';
+      }
+    }
+
+    async function getAllSellers() {
+      const output = document.getElementById('allSellers');
+      output.textContent = 'Loading...';
+
+      try {
+        const res = await fetch(`${baseUrl}/sellers`);
+        if (res.ok) {
+          const sellers = await res.json();
+          output.textContent = JSON.stringify(sellers, null, 2);
+        } else {
+          output.textContent = `Error: ${res.status} ${res.statusText}`;
+        }
+      } catch {
+        output.textContent = 'Network error or server not reachable.';
+      }
+    }
+
+    async function getSellerById() {
+      const id = document.getElementById('sellerId').value.trim();
+      const output = document.getElementById('sellerByIdResult');
+      output.textContent = '';
+
+      if (!id) {
+        output.textContent = 'Please enter a Seller ID.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${baseUrl}/seller/${id}`);
+        if (res.ok) {
+          const seller = await res.json();
+          output.textContent = JSON.stringify(seller, null, 2);
+        } else if (res.status === 404) {
+          output.textContent = `Seller with ID ${id} not found.`;
+        } else {
+          output.textContent = `Error: ${res.status} ${res.statusText}`;
+        }
+      } catch {
+        output.textContent = 'Network error or server not reachable.';
+      }
+    }
+
+    async function deleteSellerById() {
+      const id = document.getElementById('deleteSellerId').value.trim();
+      const token = document.getElementById('tokenDelete').value.trim();
+      const output = document.getElementById('deleteResult');
+      output.textContent = '';
+
+      if (!id || !token) {
+        output.textContent = 'Seller ID and Auth Token are required.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${baseUrl}/seller/${id}`, {
+          method: 'DELETE',
+          headers: { 'token': token }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          output.textContent = 'Seller deleted successfully:\n' + JSON.stringify(data, null, 2);
+        } else if (res.status === 401 || res.status === 403) {
+          output.textContent = 'Unauthorized: Invalid or missing token.';
+        } else if (res.status === 404) {
+          output.textContent = `Seller with ID ${id} not found.`;
+        } else {
+          output.textContent = `Error: ${res.status} ${res.statusText}`;
+        }
+      } catch {
+        output.textContent = 'Network error or server not reachable.';
+      }
+    }
+  </script>
+
+</body>
+</html>
