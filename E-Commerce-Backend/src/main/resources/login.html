@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-Commerce Login & Registration</title>
+  <!-- Animated Fullscreen Monkey Background -->
+<div class="animated-background">
+  <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWp1ZDc0YWJybG00M2lnaGFub2d5andpcmtsMHdyZnFpeW1uajRrdSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/PidSzdflbzd1sksap9/giphy.gif"
+       alt="Monkey Eating Mango"
+       class="monkey" />
+</div>
+
+<style>
+  .animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to top right, #fefcea, #f1da36);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .animated-background .monkey {
+    
+    max-width: 100%;
+    height: 185%;
+    animation: float 2s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+</style>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    .tab-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tab-buttons button {
+      flex: 1 1 45%;
+      margin: 5px;
+      padding: 10px;
+      cursor: pointer;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      font-weight: bold;
+    }
+    .tab-buttons button.active {
+      background-color: #fff;
+      border-bottom: 2px solid #007bff;
+      color: #007bff;
+    }
+    form {
+      border: 1px solid #ccc;
+      padding: 20px;
+      background: #fff;
+      display: none;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    button.submit-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Dashboard</title>
+  <style>
+    #logoutBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s;
+    }
+
+    #logoutBtn:hover {
+      background-color: #e60000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logout Button -->
+  <button id="logoutBtn">Session Not Working?</button>
+
+  <script>
+    document.getElementById("logoutBtn").addEventListener("click", async function () {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // If no session, go to logout.html anyway
+        //window.location.href = "logout.html";
+        //return;
+      }
+
+      try {
+        const response = await fetch("/logout/customer", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ token: token }) 
+
+        });
+
+        // Regardless of success or failure, redirect to logout.html
+        localStorage.removeItem("token");
+        localStorage.removeItem("userType");
+        window.location.href = "login.html"
+        
+      } catch (error) {
+        console.error("Error during logout:", error);
+        // Still redirect to logout.html
+        localStorage.removeItem("token");
+        localStorage.removeItem("userType");
+       
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script>
+  window.onload = function() {
+    const token = localStorage.getItem("token");
+    const userType = localStorage.getItem("userType");
+
+    if (token) {
+      if (userType === "seller") {
+        window.location.href = 'seller_dashboard.html';
+      } else if (userType === "customer") {
+        window.location.href = 'customer_dashboard.html';
+      }
+      // You can add else block if needed, e.g., for unknown userType
+    }
+    // If no token or userType, do nothing (stay on login page)
+  };
+</script>
+
+
+
+<h2>E-Commerce Portal</h2>
+
+<div class="tab-buttons">
+  <button id="sellerTab" class="active" onclick="showForm('seller')">Seller Login</button>
+  <button id="customerTab" onclick="showForm('customer')">Customer Login</button>
+  <button id="registerSellerTab" onclick="showForm('registerSeller')">Register Seller</button>
+  <button id="registerCustomerTab" onclick="showForm('registerCustomer')">Register Customer</button>
+</div>
+
+<!-- Seller Login Form -->
+<form id="sellerForm" onsubmit="event.preventDefault(); loginSeller();" style="display:block;">
+  <div class="form-group">
+    <label for="sellerMobile">Mobile Number:</label>
+    <input type="tel" id="sellerMobile" name="mobile" pattern="[6789][0-9]{9}" required />
+  </div>
+  <div class="form-group">
+    <label for="sellerPassword">Password:</label>
+    <input type="password" id="sellerPassword" name="password" required />
+  </div>
+  <button type="submit" class="submit-btn">Login as Seller</button>
+</form>
+
+<!-- Customer Login Form -->
+<form id="customerForm" onsubmit="event.preventDefault(); loginCustomer();">
+  <div class="form-group">
+    <label for="customerMobileId">Mobile Number:</label>
+    <input type="tel" id="customerMobileId" name="mobileId" pattern="[6789][0-9]{9}" required />
+  </div>
+  <div class="form-group">
+    <label for="customerEmailId">Email (optional):</label>
+    <input type="email" id="customerEmailId" name="emailId" />
+  </div>
+  <div class="form-group">
+    <label for="customerPassword">Password:</label>
+    <input type="password" id="customerPassword" name="password" required />
+  </div>
+  <button type="submit" class="submit-btn">Login as Customer</button>
+</form>
+
+<!-- Seller Registration Form -->
+<!-- Seller Registration Form -->
+<form id="registerSellerForm" onsubmit="event.preventDefault(); registerSeller();">
+  <div class="form-group">
+    <label for="newSellerFirstName">First Name:</label>
+    <input 
+      type="text" 
+      id="newSellerFirstName" 
+      name="firstName" 
+      pattern="[A-Za-z\s]+" 
+      placeholder="Enter first name" 
+      required 
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="newSellerLastName">Last Name:</label>
+    <input 
+      type="text" 
+      id="newSellerLastName" 
+      name="lastName" 
+      pattern="[A-Za-z\s]+" 
+      placeholder="Enter last name" 
+      required 
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="newSellerMobile">Mobile Number:</label>
+    <input 
+      type="tel" 
+      id="newSellerMobile" 
+      name="mobile" 
+      pattern="[6789][0-9]{9}" 
+      placeholder="Enter 10-digit mobile number" 
+      required 
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="newSellerEmail">Email:</label>
+    <input 
+      type="email" 
+      id="newSellerEmail" 
+      name="emailId" 
+      placeholder="Enter email" 
+      required 
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="newSellerPassword">Password:</label>
+    <input 
+      type="password" 
+      id="newSellerPassword" 
+      name="password" 
+      pattern="[A-Za-z0-9!@#$%^&*_]{8,15}" 
+      placeholder="Enter password (8-15 characters)" 
+      required 
+    />
+  </div>
+
+  <button type="submit" class="submit-btn">Register as Seller</button>
+</form>
+
+
+<!-- Customer Registration Form -->
+<!-- Customer Registration Form -->
+<form id="registerCustomerForm" onsubmit="event.preventDefault(); registerCustomer();">
+  <div class="form-group">
+    <label for="newCustomerFirstName">First Name:</label>
+    <input 
+      type="text" 
+      id="newCustomerFirstName" 
+      name="firstName" 
+      pattern="[A-Za-z.\s]+" 
+      placeholder="Enter first name" 
+      required 
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="newCustomerLastName">Last Name:</label>
+    <input 
+      type="text" 
+      id="newCustomerLastName" 
+      name="lastName" 
+      pattern="[A-Za-z.\s]+" 
+      placeholder="Enter last name" 
+      required 
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="newCustomerMobile">Mobile Number:</label>
+    <input 
+      type="tel" 
+      id="newCustomerMobile" 
+      name="mobileNo" 
+      pattern="[6789][0-9]{9}" 
+      placeholder="Enter 10-digit mobile number" 
+      required 
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="newCustomerEmail">Email:</label>
+    <input 
+      type="email" 
+      id="newCustomerEmail" 
+      name="emailId" 
+      placeholder="Enter email" 
+      required 
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="newCustomerPassword">Password:</label>
+    <input 
+      type="password" 
+      id="newCustomerPassword" 
+      name="password" 
+      pattern="[A-Za-z0-9!@#$%^&*_]{8,15}" 
+      placeholder="Enter password (8-15 characters)" 
+      required 
+    />
+  </div>
+
+  <button type="submit" class="submit-btn">Register as Customer</button>
+</form>
+
+<script>
+  function showForm(type) {
+    const forms = {
+      seller: 'sellerForm',
+      customer: 'customerForm',
+      registerSeller: 'registerSellerForm',
+      registerCustomer: 'registerCustomerForm'
+    };
+    const tabs = {
+      seller: 'sellerTab',
+      customer: 'customerTab',
+      registerSeller: 'registerSellerTab',
+      registerCustomer: 'registerCustomerTab'
+    };
+
+    Object.values(forms).forEach(id => document.getElementById(id).style.display = 'none');
+    Object.values(tabs).forEach(id => document.getElementById(id).classList.remove('active'));
+
+    document.getElementById(forms[type]).style.display = 'block';
+    document.getElementById(tabs[type]).classList.add('active');
+  }
+
+  async function loginSeller() {
+    const mobile = document.getElementById('sellerMobile').value;
+    const password = document.getElementById('sellerPassword').value;
+    const payload = { mobile, password };
+
+    try {
+      const response = await fetch('/login/seller', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert('Seller logged in successfully!');
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userType", "seller"); 
+        console.log(data);
+        window.location.href = 'seller_dashboard.html';
+      } else {
+        const err = await response.text();
+        alert('Seller login failed: ' + err);
+      }
+    } catch (error) {
+      alert('Network error during seller login');
+    }
+  }
+
+  async function loginCustomer() {
+    const mobileId = document.getElementById('customerMobileId').value;
+    const emailId = document.getElementById('customerEmailId').value;
+    const password = document.getElementById('customerPassword').value;
+    const payload = { mobileId, emailId, password };
+
+    try {
+      const response = await fetch('/login/customer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert('Customer logged in successfully!');
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userType", "customer"); 
+        console.log(data);
+        window.location.href = 'customer_dashboard.html';
+      } else {
+        const err = await response.text();
+        alert('Customer login failed: ' + err);
+      }
+    } catch (error) {
+      alert('Network error during customer login');
+    }
+  }
+
+ async function registerSeller() {
+  const firstName = document.getElementById('newSellerFirstName').value.trim();
+  const lastName = document.getElementById('newSellerLastName').value.trim();
+  const mobile = document.getElementById('newSellerMobile').value.trim();
+  const emailId = document.getElementById('newSellerEmail').value.trim();
+  const password = document.getElementById('newSellerPassword').value;
+
+  const payload = { firstName, lastName, mobile, emailId, password };
+
+  try {
+    const response = await fetch('/register/seller', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert('Seller registered successfully!');
+    } else {
+      const err = await response.text();
+      alert('Seller registration failed: ' + err);
+    }
+  } catch (error) {
+    alert('Network error during seller registration');
+  }
+}
+
+
+  async function registerCustomer() {
+  const firstName = document.getElementById('newCustomerFirstName').value;
+  const lastName = document.getElementById('newCustomerLastName').value;
+  const mobileNo = document.getElementById('newCustomerMobile').value;
+  const emailId = document.getElementById('newCustomerEmail').value;
+  const password = document.getElementById('newCustomerPassword').value;
+
+  const payload = {
+    firstName,
+    lastName,
+    mobileNo,
+    emailId,
+    password
+  };
+
+  try {
+    const response = await fetch('/register/customer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert('Customer registered successfully!');
+    } else {
+      const err = await response.text();
+      alert('Customer registration failed: ' + err);
+    }
+  } catch (error) {
+    alert('Network error during customer registration');
+  }
+}
+
+</script>
+
+</body>
+</html>

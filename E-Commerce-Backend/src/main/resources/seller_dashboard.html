@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Account</title>
+</head>
+
+<body>
+
+<!-- Animated Fullscreen Monkey Background -->
+<div class="animated-background">
+  <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExd25wN2plNHY0MWp1MnpucWFuNTA4Mjd4NnI2N2RnNm1pbWEweDhydiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cmegx6SssTKmEFEcwj/giphy.gif"
+       alt="Monkey Eating Mango"
+       class="monkey" />
+</div>
+
+<style>
+  .animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to top right, #fefcea, #f1da36);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .animated-background .monkey {
+    
+    max-width: 100%;
+    height: 185%;
+    opacity: 0.5;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+</style>
+
+
+
+    <style>
+    #logoutBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s;
+    }
+
+    #logoutBtn:hover {
+      background-color: #e60000;
+    }
+  </style>
+
+
+
+  <!-- Logout Button -->
+  <button id="logoutBtn">Logout</button>
+
+  <script>
+    document.getElementById("logoutBtn").addEventListener("click", async function () {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // If no session, go to logout.html anyway
+        //window.location.href = "logout.html";
+        //return;
+      }
+
+      try {
+        const response = await fetch("/logout/customer", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ token: token }) 
+
+        });
+
+        // Regardless of success or failure, redirect to logout.html
+        localStorage.removeItem("token");
+        localStorage.removeItem("userType");
+        window.location.href = "login.html"
+        
+      } catch (error) {
+        console.error("Error during logout:", error);
+        // Still redirect to logout.html
+        localStorage.removeItem("token");
+        localStorage.removeItem("userType");
+       
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+
+  <style>
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    form {
+      margin-bottom: 30px;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 6px;
+      background-color: #fafafa;
+    }
+    form h2 {
+      margin-top: 0;
+      color: #555;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: 600;
+      color: #444;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="email"] {
+      width: 100%;
+      padding: 8px 10px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .response-message {
+      margin-top: 10px;
+      font-weight: 600;
+    }
+  </style>
+
+
+  <div class="container">
+    <h1>Seller Dashboard</h1>
+
+    <!-- Update Seller Details -->
+    <form id="updateDetailsForm">
+      <h2>Update Seller Details</h2>
+      <label for="sellerName">Name</label>
+      <input type="text" id="sellerName" placeholder="Enter new name" required />
+      <label for="sellerEmail">Email</label>
+      <input type="email" id="sellerEmail" placeholder="Enter new email" required />
+      <button type="submit">Update Details</button>
+      <div class="response-message" id="detailsResponse"></div>
+    </form>
+
+    <!-- Update Password -->
+    <form id="updatePasswordForm">
+      <h2>Update Password</h2>
+      <label for="sellerOldPassword">Old Password</label>
+      <input type="password" id="sellerOldPassword" placeholder="Current Password" required />
+      <label for="sellerNewPassword">New Password</label>
+      <input type="password" id="sellerNewPassword" placeholder="New Password" required />
+      <button type="submit">Update Password</button>
+      <div class="response-message" id="passwordResponse"></div>
+    </form>
+
+    <!-- Update Mobile Number -->
+    <form id="updateMobileForm">
+      <h2>Update Mobile Number</h2>
+      <label for="sellerMobile">New Mobile Number</label>
+      <input type="text" id="sellerMobile" placeholder="New Mobile Number" required />
+      <button type="submit">Update Mobile</button>
+      <div class="response-message" id="mobileResponse"></div>
+    </form>
+
+    <!-- Add Product -->
+  <form id="addProductForm">
+  <h2>Add New Product</h2>
+
+  <label for="prodName">Product Name</label>
+  <input type="text" id="prodName" placeholder="Product Name" required />
+
+  <label for="category">Category</label>
+  <input type="text" id="category" placeholder="Category" required />
+
+  <label for="description">Description</label>
+  <input type="text" id="description" placeholder="Description" />
+
+  <label for="manufacturer">Manufacturer</label>
+  <input type="text" id="manufacturer" placeholder="Manufacturer" required />
+
+  <label for="price">Price</label>
+  <input type="number" id="price" placeholder="Price" step="0.01" required />
+
+  <label for="quantity">Quantity</label>
+  <input type="number" id="quantity" placeholder="Quantity" required />
+
+  <label for="status">Status</label>
+  <input type="text" id="status" placeholder="Status (e.g., AVAILABLE)" />
+
+  <button type="submit">Add Product</button>
+  <div class="response-message" id="addProductResponse"></div>
+</form>
+
+
+  
+    <!-- Add more categories as needed -->
+  </select>
+
+  <label for="status">Product Status</label>
+  <select id="status" required>
+    <option value="">Select Status</option>
+    <option value="AVAILABLE">Available</option>
+    <option value="OUT_OF_STOCK">Out of Stock</option>
+    <option value="DISCONTINUED">Discontinued</option>
+  </select>
+
+  <button type="submit">Add Product</button>
+  <div class="response-message" id="addProductResponse"></div>
+</form>
+
+
+    <!-- Delete Product -->
+    <form id="deleteProductForm">
+      <h2>Delete Product</h2>
+      <label for="deleteProdId">Product ID</label>
+      <input type="number" id="deleteProdId" placeholder="Product ID to delete" required />
+      <button type="submit">Delete Product</button>
+      <div class="response-message" id="deleteProductResponse"></div>
+    </form>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token"); // Add token if required for auth headers
+
+    // Utility function to send PUT or POST fetch requests
+    async function sendRequest(url, method, data) {
+      try {
+        const resp = await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { "Authorization": `Bearer ${token}` })
+          },
+          body: JSON.stringify(data)
+        });
+        if (!resp.ok) {
+          const errText = await resp.text();
+          throw new Error(errText || "Request failed");
+        }
+        return await resp.json();
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    // Update Seller Details
+    document.getElementById("updateDetailsForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById("sellerName").value,
+        email: document.getElementById("sellerEmail").value
+      };
+      try {
+        const res = await sendRequest("/seller", "PUT", data);
+        document.getElementById("detailsResponse").textContent = "Details updated successfully!";
+      } catch (err) {
+        document.getElementById("detailsResponse").textContent = "Error: " + err.message;
+      }
+    });
+
+    // Update Password
+    document.getElementById("updatePasswordForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const data = {
+        oldPassword: document.getElementById("sellerOldPassword").value,
+        newPassword: document.getElementById("sellerNewPassword").value
+      };
+      try {
+        const res = await sendRequest("/seller/update/password", "PUT", data);
+        document.getElementById("passwordResponse").textContent = "Password updated successfully!";
+      } catch (err) {
+        document.getElementById("passwordResponse").textContent = "Error: " + err.message;
+      }
+    });
+
+    // Update Mobile Number
+    document.getElementById("updateMobileForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const data = {
+        mobile: document.getElementById("sellerMobile").value
+      };
+      try {
+        const res = await sendRequest("/seller/update/mobile", "PUT", data);
+        document.getElementById("mobileResponse").textContent = "Mobile number updated successfully!";
+      } catch (err) {
+        document.getElementById("mobileResponse").textContent = "Error: " + err.message;
+      }
+    });
+
+
+    // Add Product
+    
+ 
+  document.getElementById('addProductForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      document.getElementById("addProductResponse").innerText = "You must be logged in.";
+      return;
+    }
+
+    const product = {
+      productName: document.getElementById('prodName').value,
+      category: document.getElementById('category').value,
+      description: document.getElementById('description').value,
+      manufacturer: document.getElementById('manufacturer').value,
+      price: parseFloat(document.getElementById('price').value),
+      quantity: parseInt(document.getElementById('quantity').value),
+      status: document.getElementById('status').value
+    };
+
+    try {
+      const response = await fetch("/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "token": token
+        },
+        body: JSON.stringify(product)
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        document.getElementById("addProductResponse").innerText = "Product added successfully!";
+        document.getElementById("addProductForm").reset();
+      } else {
+        document.getElementById("addProductResponse").innerText = "Error: " + (result.message || "Unknown error");
+      }
+    } catch (error) {
+      document.getElementById("addProductResponse").innerText = "Network error. Try again later.";
+    }
+  });
+
+
+
+
+    // Delete Product
+    document.getElementById("deleteProductForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const productId = document.getElementById("deleteProdId").value;
+      try {
+        const resp = await fetch(`/products/${productId}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        if (resp.ok) {
+          document.getElementById("deleteProductResponse").textContent = "Product deleted successfully!";
+        } else {
+          const errText = await resp.text();
+          document.getElementById("deleteProductResponse").textContent = "Error: " + errText;
+        }
+      } catch (err) {
+        document.getElementById("deleteProductResponse").textContent = "Error: " + err.message;
+      }
+    });
+  </script>
+
+
+
+
+
+
+    
+</body>
+</html>

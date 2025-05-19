@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer account</title>
+</head>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #e0f7fa;
+    }
+    h1 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+    /* Simple Rabbit Eating Carrot Animation */
+    .rabbit {
+      position: fixed;
+      display: inline-block;
+      margin-top: 5%;
+      margin-right: 80%;
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      border: 2px solid #555;
+      border-radius: 50% 50% 40% 40%;
+      animation: munch 2s infinite;
+    }
+    .ear {
+      position: absolute;
+      top: -40px;
+      width: 30px;
+      height: 60px;
+      background: #fff;
+      border: 2px solid #555;
+      border-radius: 40% 40% 60% 60%;
+      animation: twitch 2s infinite;
+    }
+    .ear.left {
+      left: 10px;
+      transform-origin: bottom center;
+    }
+    .ear.right {
+      right: 10px;
+      transform-origin: bottom center;
+      animation-delay: 1s;
+    }
+    .eye {
+      position: absolute;
+      top: 35px;
+      width: 10px;
+      height: 10px;
+      background: #333;
+      border-radius: 50%;
+    }
+    .eye.left {
+      left: 25px;
+    }
+    .eye.right {
+      right: 25px;
+    }
+    .carrot {
+      position: absolute;
+      bottom: 30px;
+      right: -50px;
+      width: 40px;
+      height: 60px;
+      background: orange;
+      border-radius: 10px 10px 30px 30px;
+      animation: carrotBite 2s infinite;
+    }
+    .carrot::before {
+      content: "";
+      position: absolute;
+      top: -15px;
+      left: 5px;
+      width: 30px;
+      height: 15px;
+      background: #4caf50;
+      border-radius: 10px;
+    }
+
+    /* Animations */
+    @keyframes munch {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(10deg); }
+    }
+    @keyframes twitch {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(15deg); }
+    }
+    @keyframes carrotBite {
+      0%, 100% { right: -50px; }
+      50% { right: -40px; }
+    }
+    body {
+  font-family: Arial, sans-serif;
+  background: #e0f7fa;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* vertical centering */
+  align-items: center;      /* horizontal centering */
+  text-align: center;
+}
+  </style>
+</head>
+<body>
+
+  <div class="rabbit">
+    <div class="ear left"></div>
+    <div class="ear right"></div>
+    <div class="eye left"></div>
+    <div class="eye right"></div>
+    <div class="carrot"></div>
+  </div>
+
+<style>
+    body {
+      background-color: #222;
+      color: #f39c12; /* bright orange */
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 5px #000;
+    }
+  </style>
+<body>
+
+
+
+
+  <button id="carti" onclick="location.href='cart.html'" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    🛒 Cart
+</button>
+<style>
+  #carti {
+      position: fixed;
+      top: 20px;
+      right:150px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s;
+    }
+</style>
+  
+     <style>
+    #logoutBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s;
+    }
+
+    #logoutBtn:hover {
+      background-color: #e60000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logout Button -->
+  <button id="logoutBtn">Logout</button>
+
+  <script>
+    document.getElementById("logoutBtn").addEventListener("click", async function () {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        // If no session, go to logout.html anyway
+        //window.location.href = "logout.html";
+        //return;
+      }
+
+      try {
+        const response = await fetch("/logout/customer", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ token: token }) 
+
+        });
+
+        // Regardless of success or failure, redirect to logout.html
+        localStorage.removeItem("token");
+        localStorage.removeItem("userType");
+        window.location.href = "login.html"
+
+      } catch (error) {
+        console.error("Error during logout:", error);
+        // Still redirect to logout.html
+        localStorage.removeItem("token");
+        localStorage.removeItem("userType");
+       
+      }
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f6f8;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .product-info {
+      margin-top: 10px;
+      color: #555;
+    }
+
+    .product-info strong {
+      display: inline-block;
+      width: 110px;
+    }
+
+    .error-message {
+      color: red;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .add-to-cart {
+      margin-top: 15px;
+      background-color: #28a745;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .add-to-cart:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Available Products</h1>
+  <div id="errorMsg" class="error-message"></div>
+  <div class="product-container" id="productList"></div>
+
+  <script>
+    async function fetchProducts() {
+      try {
+        const response = await fetch("/products");
+        if (!response.ok) {
+          const err = await response.text();
+          throw new Error(err || "Failed to fetch products");
+        }
+
+        const products = await response.json();
+        const productList = document.getElementById("productList");
+        productList.innerHTML = "";
+
+        if (products.length === 0) {
+          document.getElementById("errorMsg").textContent = "No products found.";
+          return;
+        }
+
+        window.productsList = products; // Store globally
+
+        products.forEach((prod, index) => {
+          const card = document.createElement("div");
+          card.className = "product-card";
+
+          card.innerHTML = `
+            <div class="product-title">${prod.prodName}</div>
+            <div class="product-info"><strong>Manufacturer:</strong> ${prod.manufaturer}</div>
+            <div class="product-info"><strong>Price:</strong> ₹${prod.price.toFixed(2)}</div>
+            <div class="product-info"><strong>Quantity:</strong> ${prod.quantity}</div>
+            <button class="add-to-cart" onclick="addToCart(${index})">Add to Cart</button>
+          `;
+
+          productList.appendChild(card);
+        });
+      } catch (error) {
+        console.error(error);
+        document.getElementById("errorMsg").textContent = "Error fetching products: " + error.message;
+      }
+    }
+
+    function addToCart(index) {
+      const product = window.productsList[index];
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      cart.push(product);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`Added "${product.prodName}" to cart!`);
+    }
+
+    window.onload = fetchProducts;
+  </script>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #profileBtn {
+      position: fixed;
+      top: 20px;
+      right: 140px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s;
+    }
+    #profileBtn:hover {
+      background-color: #3e8e41;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .modal form {
+      display: none;
+      margin-top: 10px;
+    }
+    .modal button {
+      margin-top: 10px;
+    }
+    .modal select {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+    .modal input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+  </style>
+
+
+
+
+
+
+
+
+
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Dashboard</title>
+  <style>
+    .hidden { display: none; }
+    .form-section { margin-bottom: 20px; }
+    button { margin: 5px; }
+
+    /* Toast Styles */
+    #toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+    .toast {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #00c9ff, #92fe9d);
+      color: white;
+      padding: 14px 20px;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      min-width: 280px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      font-family: 'Segoe UI', sans-serif;
+      animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+    }
+
+    .toast .close-btn {
+      background: #ffffff33;
+      border: none;
+      color: white;
+      padding: 4px 10px;
+      font-size: 16px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toast .close-btn:hover {
+      background: #ffffff55;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(100%); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateX(100%); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Customer Profile update(Below)</h1>
+  <button onclick="toggleProfileOptions()">Profile</button>
+  <div id="profile-options" class="hidden">
+    <button onclick="showForm('password')">Update Password</button>
+    <button onclick="showForm('credentials')">Update Credentials</button>
+    <button onclick="showForm('card')">Update Card</button>
+    <button onclick="showForm('address')">Update Address</button>
+  </div>
+
+  <div id="form-container"></div>
+  <div id="toast-container"></div>
+
+  <script>
+    const token = localStorage.getItem("token") || "your_token_here";
+
+    function toggleProfileOptions() {
+      const opts = document.getElementById("profile-options");
+      opts.classList.toggle("hidden");
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.classList.add('toast');
+
+      const msg = document.createElement('span');
+      msg.textContent = message;
+
+      const closeBtn = document.createElement('button');
+      closeBtn.innerHTML = '&times;';
+      closeBtn.classList.add('close-btn');
+      closeBtn.onclick = () => toast.remove();
+
+      toast.appendChild(msg);
+      toast.appendChild(closeBtn);
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    function showForm(type) {
+      const formContainer = document.getElementById("form-container");
+      let formHtml = "";
+
+      if (type === "password") {
+        formHtml = `
+          <div class="form-section">
+            <h3>Update Password</h3>
+            <input id="mobileId" placeholder="Mobile ID" /><br />
+            <input id="emailId" placeholder="Email ID" /><br />
+            <input id="password" type="password" placeholder="New Password" /><br />
+            <button onclick="updatePassword()">Submit</button>
+          </div>`;
+      } else if (type === "credentials") {
+        formHtml = `
+          <div class="form-section">
+            <h3>Update Credentials</h3>
+            <input id="firstName" placeholder="First Name" /><br />
+            <input id="lastName" placeholder="Last Name" /><br />
+            <input id="mobileNo" placeholder="Mobile No" /><br />
+            <input id="email" placeholder="Email ID" /><br />
+            <input id="password" type="password" placeholder="Password" /><br />
+            <button onclick="updateCredentials()">Submit</button>
+          </div>`;
+      } else if (type === "card") {
+        formHtml = `
+          <div class="form-section">
+            <h3>Update Card</h3>
+            <input id="cardNumber" placeholder="Card Number" /><br />
+            <input id="cardValidity" placeholder="Card Validity" /><br />
+            <input id="cardCVV" placeholder="CVV" /><br />
+            <button onclick="updateCard()">Submit</button>
+          </div>`;
+      } else if (type === "address") {
+        formHtml = `
+          <div class="form-section">
+            <h3>Update Address</h3>
+            <input id="addressId" placeholder="Address ID" /><br />
+            <input id="streetNo" placeholder="Street No" /><br />
+            <input id="buildingName" placeholder="Building Name" /><br />
+            <input id="locality" placeholder="Locality" /><br />
+            <input id="city" placeholder="City" /><br />
+            <input id="state" placeholder="State" /><br />
+            <input id="pincode" placeholder="Pincode" /><br />
+            <button onclick="updateAddress()">Submit</button>
+          </div>`;
+      }
+
+      formContainer.innerHTML = formHtml;
+    }
+
+    async function sendPutRequest(url, body, isAddress = false) {
+      const headers = {
+        "Content-Type": "application/json",
+        "token": token
+      };
+
+      if (isAddress) url += "?type=home";
+
+      try {
+        const response = await fetch(url, {
+          method: "PUT",
+          headers: headers,
+          body: JSON.stringify(body)
+        });
+
+        const result = await response.json();
+        showToast(result.message || "✅ Updated successfully!");
+      } catch (error) {
+        showToast("❌ Error occurred!");
+      }
+    }
+
+    function updatePassword() {
+      const body = {
+        mobileId: document.getElementById("mobileId").value,
+        emailId: document.getElementById("emailId").value,
+        password: document.getElementById("password").value
+      };
+      sendPutRequest("/customer/update/password", body);
+    }
+
+    function updateCredentials() {
+      const body = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        mobileNo: document.getElementById("mobileNo").value,
+        emailId: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      };
+      sendPutRequest("/customer/update/credentials", body);
+    }
+
+    function updateCard() {
+      const body = {
+        cardNumber: document.getElementById("cardNumber").value,
+        cardValidity: document.getElementById("cardValidity").value,
+        cardCVV: document.getElementById("cardCVV").value
+      };
+      sendPutRequest("/customer/update/card", body);
+    }
+
+    function updateAddress() {
+      const body = {
+        addressId: document.getElementById("addressId").value,
+        streetNo: document.getElementById("streetNo").value,
+        buildingName: document.getElementById("buildingName").value,
+        locality: document.getElementById("locality").value,
+        city: document.getElementById("city").value,
+        state: document.getElementById("state").value,
+        pincode: document.getElementById("pincode").value
+      };
+      sendPutRequest("/customer/update/address", body, true);
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
