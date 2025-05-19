@@ -1,12 +1,23 @@
+# Stage 1: Build the jar using Maven
+FROM maven:3.9.0-eclipse-temurin-17 AS build
 
-# Use an OpenJDK base image
+WORKDIR /app
+
+# Copy the pom and source files
+COPY pom.xml .
+COPY src ./src
+
+# Build the project and package jar
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run the app
 FROM openjdk:17-jdk-alpine
 
-# Copy the jar file into the container
-COPY target/your-app-name.jar app.jar
+WORKDIR /app
 
-# Expose port 8080 (or your app's port)
+# Copy the jar from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Run the jar file
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
