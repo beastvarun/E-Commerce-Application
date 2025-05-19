@@ -37,26 +37,6 @@
 
 
 
-## Installation & Run
-
-* Before running the API server, you should update the database config inside the [application.properties](E-Commerce-Backend\src\main\resources\application.properties) file. 
-* Update the port number, username and password as per your local database config.
-
-```
-    server.port=8009
-
-    spring.datasource.url=jdbc:mysql://localhost:3306/ecommercedb
-    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-    spring.datasource.username=root
-    spring.datasource.password=root
-
-```
-
-## API Root Endpoint
-
-`https://localhost:8009/`
-
-`http://localhost:8009/swagger-ui/index.html#/`
 
 
 ## API Module Endpoints
